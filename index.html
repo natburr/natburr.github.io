@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nat Burr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --forest-deep: #1a2e1a;
+      --forest-mid: #2d4a2d;
+      --moss: #4a6741;
+      --sage: #7a9e6e;
+      --lichen: #a8c49a;
+      --mist: #ddecd8;
+      --paper: #f5f0e8;
+      --bark: #8b6f47;
+      --cream: #faf7f2;
+      --ink: #1c1c1a;
+      --ink-light: #4a4a44;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- Subtle background texture --- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(74,103,65,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 80%, rgba(42,74,45,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* --- Nav --- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(74,103,65,0.15);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-name {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--forest-deep);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--ink-light);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--moss); }
+
+    /* --- Main layout --- */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 3rem;
+      align-items: start;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid rgba(74,103,65,0.2);
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: 2.75rem;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--forest-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-role {
+      font-size: 0.9375rem;
+      color: var(--ink-light);
+      margin-bottom: 0.375rem;
+      line-height: 1.5;
+    }
+
+    .hero-inst {
+      font-size: 0.875rem;
+      color: var(--moss);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-bio {
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--ink-light);
+      max-width: 560px;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.625rem;
+    }
+
+    .hero-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8125rem;
+      color: var(--forest-mid);
+      border: 1px solid rgba(74,103,65,0.35);
+      border-radius: 2px;
+      padding: 0.375rem 0.875rem;
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s;
+      font-weight: 400;
+    }
+
+    .hero-links a:hover {
+      background: rgba(74,103,65,0.08);
+      border-color: var(--moss);
+    }
+
+    /* Avatar area — botanical illustration feel */
+    .avatar-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 0.5rem;
+    }
+
+    .avatar-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--mist) 0%, var(--lichen) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--forest-deep);
+      border: 2px solid rgba(74,103,65,0.25);
+      flex-shrink: 0;
+    }
+
+    .avatar-dept {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      text-align: center;
+      color: var(--sage);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.6;
+    }
+
+    /* --- Sections --- */
+    section {
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    section:nth-child(2) { animation-delay: 0.1s; }
+    section:nth-child(3) { animation-delay: 0.15s; }
+    section:nth-child(4) { animation-delay: 0.2s; }
+    section:nth-child(5) { animation-delay: 0.25s; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(74,103,65,0.2);
+    }
+
+    /* --- Interest tags --- */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.8125rem;
+      padding: 0.35rem 0.875rem;
+      border-radius: 2px;
+      border: 1px solid;
+      font-weight: 400;
+    }
+
+    .tag-forest { background: rgba(26,46,26,0.06); border-color: rgba(26,46,26,0.2); color: var(--forest-deep); }
+    .tag-moss   { background: rgba(74,103,65,0.08); border-color: rgba(74,103,65,0.3); color: var(--moss); }
+    .tag-bark   { background: rgba(139,111,71,0.07); border-color: rgba(139,111,71,0.25); color: var(--bark); }
+
+    /* --- Publications --- */
+    .pub-list { display: flex; flex-direction: column; gap: 1rem; }
+
+    .pub {
+      border-left: 2px solid var(--lichen);
+      padding: 0.875rem 1rem 0.875rem 1.25rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 0 4px 4px 0;
+      transition: border-color 0.2s;
+    }
+
+    .pub:hover { border-color: var(--moss); }
+
+    .pub-title {
+      font-family: 'Lora', serif;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--forest-deep);
+      margin-bottom: 0.3rem;
+      line-height: 1.45;
+    }
+
+    .pub-authors {
+      font-size: 0.8125rem;
+      color: var(--ink-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .pub-journal { font-size: 0.8rem; color: var(--ink-light); font-style: italic; }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-open { background: rgba(74,103,65,0.12); color: var(--forest-mid); border: 1px solid rgba(74,103,65,0.25); }
+    .badge-pre  { background: rgba(139,111,71,0.1);  color: var(--bark);       border: 1px solid rgba(139,111,71,0.25); }
+
+    .pub-link {
+      font-size: 0.8rem;
+      color: var(--moss);
+      text-decoration: none;
+      margin-left: auto;
+    }
+
+    .pub-link:hover { text-decoration: underline; }
+
+    /* --- Repos --- */
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.875rem;
+    }
+
+    .repo {
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(74,103,65,0.18);
+      border-radius: 4px;
+      padding: 1rem 1.125rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .repo:hover { border-color: var(--moss); background: rgba(255,255,255,0.8); }
+
+    .repo-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem;
+      color: var(--forest-mid);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .repo-desc {
+      font-size: 0.8125rem;
+      color: var(--ink-light);
+      line-height: 1.55;
+      margin-bottom: 0.875rem;
+    }
+
+    .repo-foot {
+      display: flex;
+      gap: 0.875rem;
+      align-items: center;
+    }
+
+    .lang-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .repo-meta { font-size: 0.75rem; color: var(--ink-light); display: flex; align-items: center; gap: 0.3rem; }
+
+    /* --- Contact --- */
+    .contact-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .contact-item {
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .contact-item a { color: var(--moss); text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+
+    /* --- Footer --- */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(74,103,65,0.15);
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--sage);
+      letter-spacing: 0.06em;
+    }
+
+    /* --- Animation --- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 640px) {
+      .hero { grid-template-columns: 1fr; }
+      .avatar-area { flex-direction: row; justify-content: flex-start; padding-top: 0; }
+      .hero h1 { font-size: 2rem; }
+      nav { padding: 0 1rem; }
+      main { padding: 2.5rem 1.25rem 4rem; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-name">Nat Burr</span>
+  <ul class="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#code">Code</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Master of Forestry · Yale University</p>
+      <h1>Nat Burr</h1>
+      <p class="hero-role">Human-mediated dispersal of understory forest herbs &amp; trees<br>through population genomics</p>
+      <p class="hero-inst">Yale School of the Environment · The Forest School</p>
+      <p class="hero-bio">
+        I study how human activity shapes the movement and genetic structure of understory plant populations — from forest herbs to woody tree species. My research combines population genomics with landscape ecology to understand dispersal dynamics and their applications in agroforestry system design and conservation.
+      </p>
+      <div class="hero-links">
+        <a href="https://github.com/natburr" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          GitHub
+        </a>
+        <a href="cv.pdf">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          CV
+        </a>
+        <a href="https://scholar.google.com" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Google Scholar
+        </a>
+        <a href="mailto:nat.burr@yale.edu">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Email
+        </a>
+      </div>
+    </div>
+    <div class="avatar-area">
+      <div class="avatar-circle">NB</div>
+      <p class="avatar-dept">Yale School of<br>the Environment<br>· Forest School ·</p>
+    </div>
+  </div>
+
+  <!-- Research Interests -->
+  <section id="research">
+    <div class="section-label">Research interests</div>
+    <div class="tags">
+      <span class="tag tag-forest">Population genomics</span>
+      <span class="tag tag-forest">Human-mediated dispersal</span>
+      <span class="tag tag-moss">Understory herbs &amp; trees</span>
+      <span class="tag tag-moss">Forest ecology</span>
+      <span class="tag tag-moss">Landscape genetics</span>
+      <span class="tag tag-bark">Agroforestry systems</span>
+      <span class="tag tag-bark">Conservation biology</span>
+      <span class="tag tag-bark">Ethnobotany</span>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications">
+    <div class="section-label">Publications</div>
+    <div class="pub-list">
+      <div class="pub">
+        <p class="pub-title">Add your publication title here</p>
+        <p class="pub-authors">Burr N, Co-author A, Co-author B</p>
+        <div class="pub-meta">
+          <span class="pub-journal">Journal Name · Year</span>
+          <span class="badge badge-open">Open access</span>
+          <a href="#" class="pub-link">PDF →</a>
+        </div>
+      </div>
+      <div class="pub">
+        <p class="pub-title">Add your preprint or thesis chapter here</p>
+        <p class="pub-authors">Burr N, Advisor Name</p>
+        <div class="pub-meta">
+          <span class="pub-journal">bioRxiv · Year</span>
+          <span class="badge badge-pre">Preprint</span>
+          <a href="#" class="pub-link">PDF →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code & Data -->
+  <section id="code">
+    <div class="section-label">Code &amp; data</div>
+    <div class="repo-grid">
+      <div class="repo">
+        <div class="repo-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          dispersal-genomics
+        </div>
+        <p class="repo-desc">Population genomics pipeline for inferring human-mediated dispersal in understory plant species.</p>
+        <div class="repo-foot">
+          <span class="repo-meta"><span class="lang-dot" style="background:#3572A5;"></span> Python</span>
+          <span class="repo-meta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            —
+          </span>
+        </div>
+      </div>
+      <div class="repo">
+        <div class="repo-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          agroforestry-landscape
+        </div>
+        <p class="repo-desc">Landscape genetics analysis linking gene flow patterns to agroforestry management practices.</p>
+        <div class="repo-foot">
+          <span class="repo-meta"><span class="lang-dot" style="background:#276DC3;"></span> R</span>
+          <span class="repo-meta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            —
+          </span>
+        </div>
+      </div>
+      <div class="repo">
+        <div class="repo-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          forest-herb-snps
+        </div>
+        <p class="repo-desc">SNP filtering and population structure analysis for understory herb species across fragmented forests.</p>
+        <div class="repo-foot">
+          <span class="repo-meta"><span class="lang-dot" style="background:#276DC3;"></span> R</span>
+          <span class="repo-meta">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            —
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="contact-list">
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <a href="mailto:nat.burr@yale.edu">nat.burr@yale.edu</a>
+      </span>
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        <a href="https://github.com/natburr" target="_blank">github.com/natburr</a>
+      </span>
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        New Haven, CT
+      </span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Nat Burr · Yale School of the Environment · natburr.github.io</p>
+</footer>
+
+</body>
+</html>
